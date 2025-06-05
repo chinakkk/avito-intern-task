@@ -1,1 +1,1 @@
-export * from './BoardsPage.jsx';
+export * from './ui/BoardsPage';

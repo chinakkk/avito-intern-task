@@ -1,1 +1,1 @@
-export * from './IssuesPage.jsx';
+export * from './ui/IssuesPage';
