@@ -16,19 +16,15 @@ export const Header = () => {
 
   return (
     <AntHeader
+      className={'sticky top-0 z-50 flex justify-between items-center bg-[#BBD8F2] px-6'}
       style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
         backgroundColor: '#BBD8F2',
-        padding: '0 24px',
       }}
     >
       <Menu
+        className={'flex-1'}
         style={{
-          flex: 1,
           backgroundColor: 'transparent',
-          borderBottom: 'none',
         }}
         mode="horizontal"
         selectedKeys={[getSelectedKey()]}

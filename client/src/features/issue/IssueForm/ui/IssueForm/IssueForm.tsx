@@ -119,7 +119,7 @@ export const IssueForm: FC<IssueFormProps> = ({ defaultValues }) => {
         </Select>
       </Form.Item>
 
-      <div className={'bg-sky-500 text-white p-40'}>
+      <div className={'flex justify-between'}>
         <Button type="default">Перейти на доску</Button>
 
         <Form.Item>
