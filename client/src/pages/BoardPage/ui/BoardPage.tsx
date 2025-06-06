@@ -1,4 +1,3 @@
-// import styles from './BoardPage.module.scss'
 import type { FC } from 'react';
 
 // type BoardPageProps = {}

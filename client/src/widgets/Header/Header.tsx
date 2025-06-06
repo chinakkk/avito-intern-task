@@ -1,11 +1,10 @@
 import { Layout, Menu } from 'antd';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { CreateIssueButton } from 'src/features/issue';
 
 const { Header: AntHeader } = Layout;
 
 export const Header = () => {
-  const navigate = useNavigate();
   const location = useLocation();
 
   // Определяем, какая вкладка активна

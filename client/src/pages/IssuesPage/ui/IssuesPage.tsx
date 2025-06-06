@@ -1,4 +1,3 @@
-// import styles from './IssuesPage.module.scss'
 import type { FC } from 'react';
 
 // type IssuesPageProps = {}

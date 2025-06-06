@@ -11,7 +11,7 @@ export const CreateIssueButton: FC<CreateIssueButtonProps> = ({ type, taskId }) 
   const { openModal } = useModalIssuesActions();
 
   const handleClick = () => {
-    openModal({ type });
+    openModal({ type, taskId });
   };
 
   return (
