@@ -3,13 +3,13 @@ import { Form, Input, Select, Button } from 'antd';
 import { useUsersQuery } from 'src/entities/user/api/useUsersQuery';
 import { useBoardsQuery } from 'src/entities/board/api/useBoardsQuery';
 import { PRIORITY_OPTIONS, STATUS_OPTIONS } from 'src/shared/constants/issueOptions';
+import { IssueType } from 'src/entities/issue/model/types/issueTypes';
 import {
   CreateIssueType,
   useCreateIssueMutation,
-} from 'src/features/issue/api/useCreateIssueMutation';
-import { IssueType } from 'src/entities/issue/model/types/issueTypes';
-import { useUpdateIssueMutation } from 'src/features/issue';
-import { useNavigate } from 'react-router-dom';
+  useUpdateIssueMutation,
+} from 'src/features/issue';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useModalIssuesActions } from 'src/entities/modal/model/modalIssuesSlice';
 
 const { TextArea } = Input;
@@ -23,6 +23,7 @@ type IssueFormProps = {
 export const IssueForm: FC<IssueFormProps> = ({ selectedIssue, type, onSuccess }) => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
+  const location = useLocation();
   const { closeModal } = useModalIssuesActions();
 
   const { mutate: createIssue, isPending: isCreating } = useCreateIssueMutation();
@@ -152,10 +153,12 @@ export const IssueForm: FC<IssueFormProps> = ({ selectedIssue, type, onSuccess }
         </Select>
       </Form.Item>
 
-      <div className="flex justify-between">
-        <Button type="default" onClick={() => navigate(`board/${selectedIssue?.boardId}`)}>
-          Перейти на доску
-        </Button>
+      <div className={`flex justify-between ${location.pathname !== '/issues' && 'justify-end'}`}>
+        {location.pathname === '/issues' && (
+          <Button type="default" onClick={() => navigate(`board/${selectedIssue?.boardId}`)}>
+            Перейти на доску
+          </Button>
+        )}
         <Button
           disabled={!isChanged}
           type="primary"

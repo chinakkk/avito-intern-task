@@ -25,3 +25,7 @@ dist-ssr
 
 .eslintcache
 .prettiercache
+
+# compiled js files (если вдруг появляются рядом с ts/tsx)
+**/*.js
+**/*.js.map

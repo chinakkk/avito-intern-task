@@ -1,6 +1,6 @@
 import { Layout, Menu } from 'antd';
 import { Link, useLocation } from 'react-router-dom';
-import { CreateIssueButton } from 'src/features/issue/ui';
+import { CreateIssueButton } from 'src/features/issue';
 
 const { Header: AntHeader } = Layout;
 
@@ -10,6 +10,7 @@ export const Header = () => {
   const getSelectedKey = () => {
     if (location.pathname.startsWith('/issues')) return 'issues';
     if (location.pathname.startsWith('/boards')) return 'boards';
+    if (location.pathname.startsWith('/board')) return 'boards';
     return '';
   };
 

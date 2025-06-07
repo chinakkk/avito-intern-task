@@ -4,8 +4,6 @@ import { Container } from 'src/shared/ui';
 import { IssueModal } from 'src/widgets/IssueModal';
 
 export const MainLayout = () => {
-  // const location = useLocation();
-
   return (
     <div className="h-screen flex flex-col">
       <Header />
