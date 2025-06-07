@@ -4,14 +4,13 @@ import { FC } from 'react';
 
 type CreateIssueButtonProps = {
   type: 'view' | 'create';
-  taskId?: string;
 };
 
-export const CreateIssueButton: FC<CreateIssueButtonProps> = ({ type, taskId }) => {
+export const CreateIssueButton: FC<CreateIssueButtonProps> = ({ type }) => {
   const { openModal } = useModalIssuesActions();
 
   const handleClick = () => {
-    openModal({ type, taskId });
+    openModal({ type });
   };
 
   return (

@@ -6,7 +6,7 @@ import { IssueList } from 'src/widgets/IssueList/ui';
 export const IssuesPage: FC = () => {
   return (
     <>
-      <IssueList />;
+      <IssueList />
     </>
   );
 };

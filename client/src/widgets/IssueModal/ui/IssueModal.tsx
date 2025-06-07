@@ -4,10 +4,10 @@ import {
   useModalIssuesActions,
 } from 'src/entities/modal/model/modalIssuesSlice';
 import { FC } from 'react';
-import { IssueForm } from 'src/features/issue';
+import { IssueForm } from 'src/features/issue/ui';
 
 export const IssueModal: FC = () => {
-  const { isOpen, type, taskId } = useModalIssuesState();
+  const { isOpen, type, selectedIssue } = useModalIssuesState();
   const { closeModal } = useModalIssuesActions();
 
   return (
@@ -17,7 +17,7 @@ export const IssueModal: FC = () => {
       footer={null}
       title={type === 'create' ? 'Создать задачу' : 'Просмотр задачи'}
     >
-      <IssueForm />
+      <IssueForm type={type} selectedIssue={selectedIssue ?? undefined} />
     </Modal>
   );
 };

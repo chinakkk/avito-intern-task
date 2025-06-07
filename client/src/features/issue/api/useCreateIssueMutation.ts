@@ -1,8 +1,15 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { axiosInstance } from 'src/shared/api/axiosInstance';
-import { IssueType } from 'src/entities/issue/model/types/issueTypes';
+import { IssuePriorityType, IssueStatusType } from 'src/entities/issue/model/types/issueTypes';
 
-export type CreateIssueType = Omit<IssueType, 'id'>;
+export type CreateIssueType = {
+  boardId: number;
+  assigneeId?: number;
+  description?: string;
+  title: string;
+  priority: IssuePriorityType;
+  status: IssueStatusType;
+};
 
 export const useCreateIssueMutation = () => {
   const queryClient = useQueryClient();
