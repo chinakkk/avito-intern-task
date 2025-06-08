@@ -20,10 +20,10 @@ export const IssueForm: FC<IssueFormProps> = memo(({ selectedIssue }) => {
   const navigate = useNavigate();
   const isEditMode = !!selectedIssue;
   const [form] = Form.useForm();
-  const isBoardPage = useMatch(`${ROUTES.BOARD}/:id`);
-  const isIssuePage = useMatch(`${ROUTES.ISSUES}`);
+  const isBoardPage = !!useMatch(`${ROUTES.BOARD}/:id`);
+  const isIssuePage = !!useMatch(`${ROUTES.ISSUES}`);
+  const showBoardNavButton = isIssuePage && selectedIssue?.boardId;
   const { id } = useParams<{ id: string }>();
-
   const formValues = Form.useWatch([], form);
 
   const { handleSubmit, isPending } = useIssueFormSubmit({
@@ -78,7 +78,7 @@ export const IssueForm: FC<IssueFormProps> = memo(({ selectedIssue }) => {
         label="Проект"
         rules={[{ required: true, message: 'Поле обязательно' }]}
       >
-        <Select disabled={!!isBoardPage} placeholder="Выберите проект" loading={isBoardsLoading}>
+        <Select disabled={isBoardPage} placeholder="Выберите проект" loading={isBoardsLoading}>
           {boardsData?.map(board => (
             <Select.Option key={board.id} value={board.id}>
               {selectedIssue?.boardNameFix ?? board.name}
@@ -111,8 +111,8 @@ export const IssueForm: FC<IssueFormProps> = memo(({ selectedIssue }) => {
           ))}
         </Select>
       </Form.Item>
-      <div className={`flex justify-between ${isIssuePage && 'justify-end'}`}>
-        {isIssuePage && selectedIssue?.boardId && (
+      <div className={`flex justify-between  ${!showBoardNavButton && 'justify-end'}`}>
+        {showBoardNavButton && (
           <Button
             type="default"
             onClick={() => navigate(`${ROUTES.BOARD}/${selectedIssue?.boardId}`)}

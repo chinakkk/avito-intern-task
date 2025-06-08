@@ -15,7 +15,6 @@ export default [
     //   es2021: true,
     // },
     languageOptions: {
-      // console: 'readonly',
       parser: tsParser,
       parserOptions: {
         ecmaVersion: 'latest',
@@ -29,6 +28,10 @@ export default [
         document: 'readonly',
         navigator: 'readonly',
         __dirname: 'readonly',
+        HTMLButtonElement: 'readonly',
+        Window: 'readonly',
+        Document: 'readonly',
+        HTMLElement: 'readonly',
       },
     },
     plugins: {
