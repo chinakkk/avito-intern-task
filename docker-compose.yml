@@ -1,18 +1,18 @@
-version: "3.8"
+version: '3.9'
 
 services:
-  server:
-    build:
-      context: ./server
+  backend:
+    build: ./server
+    container_name: backend
     ports:
       - "8080:8080"
     restart: always
 
-  client:
-    build:
-      context: ./client
+  frontend:
+    build: ./client
+    container_name: frontend
     ports:
       - "3000:80"
     depends_on:
-      - server
+      - backend
     restart: always

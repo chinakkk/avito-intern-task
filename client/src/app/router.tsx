@@ -20,7 +20,7 @@ const router = createBrowserRouter([
         element: <Navigate to={ROUTES.ISSUES} replace />,
       },
       {
-        path: '',
+        path: '/',
         element: <Navigate to={ROUTES.ISSUES} replace />,
       },
     ],
