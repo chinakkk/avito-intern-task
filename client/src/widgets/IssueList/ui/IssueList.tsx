@@ -1,57 +1,51 @@
-import { useEffect, useMemo, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { IssueCard } from 'src/entities/issue/ui/IssueCard';
-import { Skeleton, Empty } from 'antd';
+import { Empty } from 'antd';
 import { IssueType } from 'src/entities/issue/model/types/issueTypes';
-import { useIssuesQuery } from 'src/entities/issue/api/useIssuesQuery';
 import { useInView } from 'react-intersection-observer';
+import { useGlobalModal } from 'src/shared/lib/modal/GlobalModalContext';
+import { IssueForm } from 'src/features/issue';
 
-const STEP = 10;
+const infinityStep = 10;
 
-type Props = {
-  searchTerm: string;
-  filters: {
-    status: string | null;
-    boardId: number | null;
-  };
+type IssueListProps = {
+  issues: IssueType[];
 };
 
-export const IssueList = ({ searchTerm, filters }: Props) => {
-  const { data, isLoading } = useIssuesQuery();
-  const [visibleCount, setVisibleCount] = useState(STEP);
+//Рендер списка задач
+//Так же реализована бесконечная подгрузка на фронте
+//Из за большого объема карточек приходящих с бекенда за раз, при переходе на страницу есть задержка
+//В реальном проекте, нужно подгружать данные с бека постепенно, но в данном случае пришлось сделать косылик :)
+
+export const IssueList: FC<IssueListProps> = ({ issues }) => {
+  const [visibleCount, setVisibleCount] = useState(infinityStep);
   const { ref: observerRef, inView } = useInView({});
-
-  const filteredTasks = useMemo(() => {
-    if (!data) return [];
-
-    const term = searchTerm.toLowerCase();
-
-    return data.filter((task: IssueType) => {
-      const matchesTitle = task.title.toLowerCase().includes(term);
-      const matchesAssignee = task.assignee?.fullName?.toLowerCase().includes(term);
-      const matchesStatus = filters.status ? task.status === filters.status : true;
-      const matchesBoard = filters.boardId ? task.boardId === filters.boardId : true;
-
-      return (matchesTitle || matchesAssignee) && matchesStatus && matchesBoard;
-    });
-  }, [data, searchTerm, filters]);
+  const { openModal } = useGlobalModal();
 
   useEffect(() => {
-    if (inView && filteredTasks.length > visibleCount) {
-      setVisibleCount(v => v + STEP);
-    }
-  }, [inView, filteredTasks.length, visibleCount]);
+    if (inView && issues.length > visibleCount)
+      setVisibleCount(prevState => prevState + infinityStep);
+  }, [inView, issues.length, visibleCount]);
 
-  if (isLoading) return <Skeleton active />;
-  if (!filteredTasks.length) return <Empty description="Нет задач" />;
+  if (!issues.length) return <Empty description="Нет задач" />;
 
-  const visibleTasks = filteredTasks.slice(0, visibleCount);
+  const visibleTasks = issues.slice(0, visibleCount);
 
   return (
     <div className="flex flex-col gap-4">
-      {visibleTasks.map(issue => (
-        <IssueCard key={issue.id} issue={issue} />
+      {visibleTasks?.map(issue => (
+        <IssueCard
+          onClick={() =>
+            openModal({
+              title: 'Просмотр задачи',
+              content: <IssueForm type={'view'} selectedIssue={issue} />,
+            })
+          }
+          key={issue.id}
+          issue={issue}
+        />
       ))}
-      {visibleCount < filteredTasks.length && <div ref={observerRef} className="h-8" />}
+      {visibleCount < issues.length && <div ref={observerRef} className="h-8" />}
     </div>
   );
 };

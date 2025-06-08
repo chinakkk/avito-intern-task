@@ -3,20 +3,25 @@ import { MainLayout } from 'src/app/layouts/MainLayout';
 import { BoardsPage } from 'src/pages/BoardsPage';
 import { BoardPage } from 'src/pages/BoardPage';
 import { IssuesPage } from 'src/pages/IssuesPage';
+import { ROUTES } from 'src/shared/config/routes';
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <MainLayout />,
     children: [
-      { path: '/boards', element: <BoardsPage /> },
-      { path: '/board/:id', element: <BoardPage /> },
+      { path: ROUTES.BOARDS, element: <BoardsPage /> },
+      { path: `${ROUTES.BOARD}/:id`, element: <BoardPage /> },
 
-      { path: '/issues', element: <IssuesPage /> },
+      { path: ROUTES.ISSUES, element: <IssuesPage /> },
 
       {
         path: '*',
-        element: <Navigate to="/boards" replace />,
+        element: <Navigate to={ROUTES.ISSUES} replace />,
+      },
+      {
+        path: '',
+        element: <Navigate to={ROUTES.ISSUES} replace />,
       },
     ],
   },

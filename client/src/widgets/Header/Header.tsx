@@ -1,43 +1,33 @@
+import { FC } from 'react';
 import { Layout, Menu } from 'antd';
 import { Link, useLocation } from 'react-router-dom';
+
 import { CreateIssueButton } from 'src/features/issue';
+import { headerMenuItems } from 'src/shared/config/navigation';
+import { getSelectedKey } from 'src/shared/lib/routing/getSelectedKey';
 
 const { Header: AntHeader } = Layout;
 
-export const Header = () => {
+export const Header: FC = () => {
   const location = useLocation();
-
-  const getSelectedKey = () => {
-    if (location.pathname.startsWith('/issues')) return 'issues';
-    if (location.pathname.startsWith('/boards')) return 'boards';
-    if (location.pathname.startsWith('/board')) return 'boards';
-    return '';
-  };
-
-  const menuItems = [
-    {
-      key: 'issues',
-      label: <Link to="/issues">Все задачи</Link>,
-    },
-    {
-      key: 'boards',
-      label: <Link to="/boards">Проекты</Link>,
-    },
-  ];
+  const selectedKey = getSelectedKey(location.pathname);
 
   return (
     <AntHeader
-      className="sticky top-0 z-50 flex justify-between items-center bg-[#BBD8F2] px-6"
       style={{
         backgroundColor: '#BBD8F2',
       }}
+      className="sticky top-0 z-50 flex justify-between items-center px-4 md:px-6"
     >
       <Menu
         className="flex-1"
         style={{ backgroundColor: 'transparent' }}
         mode="horizontal"
-        selectedKeys={[getSelectedKey()]}
-        items={menuItems}
+        selectedKeys={[selectedKey]}
+        items={headerMenuItems.map(({ key, path, label }) => ({
+          key,
+          label: <Link to={path}>{label}</Link>,
+        }))}
       />
       <CreateIssueButton type="create" />
     </AntHeader>

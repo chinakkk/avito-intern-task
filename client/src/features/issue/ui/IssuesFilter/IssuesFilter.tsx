@@ -3,20 +3,26 @@ import { Select } from 'antd';
 import { STATUS_OPTIONS } from 'src/shared/constants/issueOptions';
 import { BoardType } from 'src/entities/board/model/types/boardTypes';
 
-type Props = {
+type IssuesFilterProps = {
   status: string | null;
   boardId: number | null;
-  setStatus: (v: string | null) => void;
-  setBoardId: (v: number | null) => void;
+  setStatus: (value: string | null) => void;
+  setBoardId: (value: number | null) => void;
   boards: BoardType[];
 };
 
-export const IssuesFilter: FC<Props> = ({ status, boardId, setStatus, setBoardId, boards }) => {
+export const IssuesFilter: FC<IssuesFilterProps> = ({
+  status,
+  boardId,
+  setStatus,
+  setBoardId,
+  boards,
+}) => {
   return (
-    <div className="flex flex-wrap gap-2 mb-4">
+    <div className="flex gap-2 mb-4">
       <Select
         value={status ?? undefined}
-        onChange={v => setStatus(v || null)}
+        onChange={value => setStatus(value || null)}
         placeholder="Фильтр по статусу"
         allowClear
         style={{ width: 180 }}
@@ -27,7 +33,7 @@ export const IssuesFilter: FC<Props> = ({ status, boardId, setStatus, setBoardId
       />
       <Select
         value={boardId ?? undefined}
-        onChange={v => setBoardId(v || null)}
+        onChange={value => setBoardId(value || null)}
         placeholder="Фильтр по доске"
         allowClear
         style={{ width: 180 }}

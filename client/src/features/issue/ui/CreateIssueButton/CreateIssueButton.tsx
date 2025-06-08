@@ -1,16 +1,14 @@
-import { Button } from 'antd';
-import { useModalIssuesActions } from 'src/entities/modal/model/modalIssuesSlice';
+import { Button, Modal } from 'antd';
 import { FC } from 'react';
+import { useGlobalModal } from 'src/shared/lib/modal/GlobalModalContext';
+import { IssueForm } from 'src/features/issue';
 
-type CreateIssueButtonProps = {
-  type: 'view' | 'create';
-};
+type CreateIssueButtonProps = {};
 
-export const CreateIssueButton: FC<CreateIssueButtonProps> = ({ type }) => {
-  const { openModal } = useModalIssuesActions();
-
+export const CreateIssueButton: FC<CreateIssueButtonProps> = () => {
+  const { openModal } = useGlobalModal();
   const handleClick = () => {
-    openModal({ type });
+    openModal({ title: 'Создание задачи', content: <IssueForm type={'create'} /> });
   };
 
   return (

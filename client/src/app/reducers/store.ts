@@ -1,10 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { useDispatch } from 'react-redux';
-import modalIssuesSlice from 'src/entities/modal/model/modalIssuesSlice';
+import filtrationSlice from 'src/features/issue/model/slice/filtrationSlice';
 
 export const store = configureStore({
   reducer: {
-    modalIssuesSlice,
+    filtrationSlice,
   },
 });
 

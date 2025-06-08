@@ -5,6 +5,7 @@ import { useModalIssuesActions } from 'src/entities/modal/model/modalIssuesSlice
 
 interface IssueCardProps {
   issue: IssueType;
+  onClick?: () => void;
 }
 
 const statusColor: Record<IssueType['status'], string> = {
@@ -19,15 +20,9 @@ const priorityColor: Record<IssueType['priority'], string> = {
   High: 'red',
 };
 
-export const IssueCard: FC<IssueCardProps> = ({ issue }) => {
-  const { openModal } = useModalIssuesActions();
-
+export const IssueCard: FC<IssueCardProps> = ({ issue, onClick }) => {
   return (
-    <Card
-      hoverable
-      onClick={() => openModal({ type: 'view', issue })}
-      className="mb-2 cursor-pointer"
-    >
+    <Card hoverable onClick={onClick} className="mb-2 cursor-pointer">
       <div className="flex justify-between items-start">
         <Typography.Text strong>{issue.title}</Typography.Text>
         <Tag color={priorityColor[issue.priority]}>{issue.priority}</Tag>

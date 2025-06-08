@@ -2,6 +2,8 @@ import { useQuery } from '@tanstack/react-query';
 import { axiosInstance } from 'src/shared/api/axiosInstance';
 import { BoardType } from 'src/entities/board/model/types/boardTypes';
 
+//Запрос всех таблиц
+
 export const useBoardsQuery = (options?: { enabled?: boolean }) => {
   return useQuery<BoardType[]>({
     queryKey: ['boards'],

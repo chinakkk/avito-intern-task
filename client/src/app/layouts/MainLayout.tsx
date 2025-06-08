@@ -1,18 +1,21 @@
 import { Header } from 'src/widgets';
 import { Outlet } from 'react-router-dom';
-import { Container } from 'src/shared/ui';
-import { IssueModal } from 'src/widgets/IssueModal';
+import { Suspense } from 'react';
+import { Skeleton } from 'antd';
+import { GlobalModalProvider } from 'src/shared/lib/modal/GlobalModalContext';
 
 export const MainLayout = () => {
   return (
-    <div className="h-screen flex flex-col">
-      <Header />
-      <main className="flex-1 overflow-y-auto pt-16">
-        <Container>
-          <Outlet />
-        </Container>
-        <IssueModal />
-      </main>
-    </div>
+    <>
+      <GlobalModalProvider>
+        <Header />
+        <main>
+          <Suspense fallback={<Skeleton />}>
+            <Outlet />
+          </Suspense>
+          {/*<IssueModal />*/}
+        </main>
+      </GlobalModalProvider>
+    </>
   );
 };

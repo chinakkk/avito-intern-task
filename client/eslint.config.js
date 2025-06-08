@@ -10,11 +10,12 @@ export default [
   js.configs.recommended,
   {
     files: ['**/*.ts', '**/*.tsx'],
-    env: {
-      browser: true,
-      es2021: true,
-    },
+    // env: {
+    //   browser: true,
+    //   es2021: true,
+    // },
     languageOptions: {
+      console: 'readonly',
       parser: tsParser,
       parserOptions: {
         ecmaVersion: 'latest',
@@ -22,6 +23,8 @@ export default [
         ecmaFeatures: { jsx: true },
       },
       globals: {
+        setTimeout: 'readonly',
+        clearTimeout: 'readonly',
         window: 'readonly',
         document: 'readonly',
         navigator: 'readonly',
@@ -35,7 +38,6 @@ export default [
       'react-hooks': reactHooks,
     },
     rules: {
-      'unused-imports/no-unused-imports': 'warn',
       'unused-imports/no-unused-vars': [
         'warn',
         { vars: 'all', varsIgnorePattern: '^_', args: 'after-used', argsIgnorePattern: '^_' },
@@ -50,6 +52,7 @@ export default [
         { blankLine: 'always', prev: 'import', next: '*' },
         { blankLine: 'any', prev: 'import', next: 'import' },
       ],
+      'unused-imports/no-unused-imports': 'error',
     },
     settings: {
       react: {

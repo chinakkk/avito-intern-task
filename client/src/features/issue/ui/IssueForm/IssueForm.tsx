@@ -10,7 +10,8 @@ import {
   useUpdateIssueMutation,
 } from 'src/features/issue';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useModalIssuesActions } from 'src/entities/modal/model/modalIssuesSlice';
+import { ROUTES } from 'src/shared/config/routes';
+import { useGlobalModal } from 'src/shared/lib/modal/GlobalModalContext';
 
 const { TextArea } = Input;
 
@@ -24,7 +25,7 @@ export const IssueForm: FC<IssueFormProps> = ({ selectedIssue, type, onSuccess }
   const [form] = Form.useForm();
   const navigate = useNavigate();
   const location = useLocation();
-  const { closeModal } = useModalIssuesActions();
+  const { closeModal } = useGlobalModal();
 
   const { mutate: createIssue, isPending: isCreating } = useCreateIssueMutation();
   const { mutate: updateIssue, isPending: isUpdating } = useUpdateIssueMutation();
@@ -96,15 +97,27 @@ export const IssueForm: FC<IssueFormProps> = ({ selectedIssue, type, onSuccess }
 
   return (
     <Form form={form} layout="vertical" onFinish={onSubmit}>
-      <Form.Item name="title" label="Название" rules={[{ required: true }]}>
+      <Form.Item
+        name="title"
+        label="Название"
+        rules={[{ required: true, message: 'Поле обязательно' }]}
+      >
         <Input placeholder="Введите название задачи" />
       </Form.Item>
 
-      <Form.Item name="description" label="Описание" rules={[{ required: true }]}>
+      <Form.Item
+        name="description"
+        label="Описание"
+        rules={[{ required: true, message: 'Поле обязательно' }]}
+      >
         <TextArea placeholder="Введите описание" rows={3} />
       </Form.Item>
 
-      <Form.Item name="boardId" label="Проект" rules={[{ required: true }]}>
+      <Form.Item
+        name="boardId"
+        label="Проект"
+        rules={[{ required: true, message: 'Поле обязательно' }]}
+      >
         <Select
           onOpenChange={open => open && refetchBoards()}
           disabled={!!selectedIssue?.boardNameFix}
@@ -119,7 +132,7 @@ export const IssueForm: FC<IssueFormProps> = ({ selectedIssue, type, onSuccess }
         </Select>
       </Form.Item>
 
-      <Form.Item name="priority" label="Приоритет" rules={[{ required: true }]}>
+      <Form.Item name="priority" label="Приоритет">
         <Select placeholder="Выберите приоритет">
           {PRIORITY_OPTIONS.map(opt => (
             <Select.Option key={opt.value} value={opt.value}>
@@ -129,7 +142,7 @@ export const IssueForm: FC<IssueFormProps> = ({ selectedIssue, type, onSuccess }
         </Select>
       </Form.Item>
 
-      <Form.Item name="status" label="Статус" rules={[{ required: true }]}>
+      <Form.Item name="status" label="Статус">
         <Select placeholder="Выберите статус">
           {STATUS_OPTIONS.map(opt => (
             <Select.Option key={opt.value} value={opt.value}>
@@ -139,7 +152,11 @@ export const IssueForm: FC<IssueFormProps> = ({ selectedIssue, type, onSuccess }
         </Select>
       </Form.Item>
 
-      <Form.Item name="assigneeId" label="Исполнитель" rules={[{ required: true }]}>
+      <Form.Item
+        name="assigneeId"
+        label="Исполнитель"
+        rules={[{ required: true, message: 'Поле обязательно' }]}
+      >
         <Select
           onOpenChange={open => open && refetchUsers()}
           placeholder="Выберите исполнителя"
@@ -154,8 +171,11 @@ export const IssueForm: FC<IssueFormProps> = ({ selectedIssue, type, onSuccess }
       </Form.Item>
 
       <div className={`flex justify-between ${location.pathname !== '/issues' && 'justify-end'}`}>
-        {location.pathname === '/issues' && (
-          <Button type="default" onClick={() => navigate(`board/${selectedIssue?.boardId}`)}>
+        {location.pathname === '/issues' && selectedIssue?.boardId && (
+          <Button
+            type="default"
+            onClick={() => navigate(`${ROUTES.BOARD}/${selectedIssue?.boardId}`)}
+          >
             Перейти на доску
           </Button>
         )}
