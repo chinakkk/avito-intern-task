@@ -36,7 +36,7 @@ export const IssuesFilter: FC<IssuesFilterProps> = ({
         onChange={value => setBoardId(value || null)}
         placeholder="Фильтр по доске"
         allowClear
-        style={{ width: 180 }}
+        style={{ width: 300 }}
         options={boards.map(board => ({
           value: board.id,
           label: board.name,

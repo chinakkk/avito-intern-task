@@ -15,7 +15,11 @@ export const Header: FC = () => {
   return (
     <AntHeader
       style={{
-        backgroundColor: '#BBD8F2',
+        backgroundColor: '#ffffff',
+        boxShadow: '0 2px 10px rgba(0, 0, 0, 0.05)',
+        borderBottom: 'none',
+        height: '48px',
+        lineHeight: '48px',
       }}
       className="sticky top-0 z-50 flex justify-between items-center px-4 md:px-6"
     >

@@ -1,43 +1,29 @@
 import { FC } from 'react';
-import { Card, Tag, Typography } from 'antd';
+import { Card, Typography } from 'antd';
 import { IssueType } from 'src/entities/issue/model/types/issueTypes';
+import { RenderPriorityTag, RenderStatusTag } from 'src/shared/lib/render/RenderTags';
 
-interface IssueCardProps {
+interface OrderCardProps {
   issue: IssueType;
   onClick?: () => void;
 }
 
-const statusColor: Record<IssueType['status'], string> = {
-  Backlog: 'default',
-  InProgress: 'processing',
-  Done: 'success',
-};
-
-const priorityColor: Record<IssueType['priority'], string> = {
-  Low: 'green',
-  Medium: 'orange',
-  High: 'red',
-};
-
-export const IssueCard: FC<IssueCardProps> = ({ issue, onClick }) => {
+export const IssueCard: FC<OrderCardProps> = ({ issue, onClick }) => {
   return (
-    <Card hoverable onClick={onClick} className="mb-2 cursor-pointer">
-      <div className="flex justify-between items-start">
-        <Typography.Text strong>{issue.title}</Typography.Text>
-        <Tag color={priorityColor[issue.priority]}>{issue.priority}</Tag>
-      </div>
+    <Card hoverable onClick={onClick} className="cursor-pointe">
+      <Typography.Text strong className="block mb-1">
+        {issue.title}
+      </Typography.Text>
 
       {issue.description && (
-        <Typography.Paragraph className={'max-w-[90%]'} type="secondary" ellipsis={{ rows: 2 }}>
+        <Typography.Paragraph type="secondary" ellipsis={{ rows: 2 }} className="mb-3">
           {issue.description}
         </Typography.Paragraph>
       )}
 
-      <div className="flex justify-between mt-2">
-        <Tag color={statusColor[issue.status]}>{issue.status}</Tag>
-        {issue.assignee && (
-          <Typography.Text type="secondary">Исполнитель: {issue.assignee.fullName}</Typography.Text>
-        )}
+      <div className="flex gap-2">
+        {RenderStatusTag(issue.status)}
+        {RenderPriorityTag(issue.priority)}
       </div>
     </Card>
   );

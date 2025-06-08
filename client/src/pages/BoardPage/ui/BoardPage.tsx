@@ -1,8 +1,10 @@
-import { useParams, useLocation } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useBoardsQuery } from 'src/entities/board/api/useBoardsQuery';
 import { BoardColumn } from 'src/widgets/BoardColumn/ui';
 import { useIssuesByBoardId } from 'src/entities/board/api/useIssuesByBoardId';
 import { STATUS_OPTIONS } from 'src/shared/constants/issueOptions';
+import { PageLayout } from 'src/shared/ui';
+import { PageTitle } from 'src/shared/ui/compontents/PageTitle';
 
 //На этой странице приходится делать запрос на все борды и искать название и описание одной
 //В реальном проекте, я бы доставал с эндпоинта который выдает данные одной доски
@@ -22,9 +24,12 @@ export const BoardPage = () => {
   }));
 
   return (
-    <div className="p-4 flex flex-col gap-6">
-      <h1 className="text-2xl font-bold">{currentBoard?.name}</h1>
-      {currentBoard?.description && <p className="text-gray-500">{currentBoard.description}</p>}
+    <PageLayout>
+      <PageTitle title={`Проект: ${currentBoard?.name}`} />
+
+      {currentBoard?.description && (
+        <p className="text-gray-500 w-full !mb-10">{currentBoard.description}</p>
+      )}
 
       <div className="flex gap-4 overflow-x-auto">
         {STATUS_OPTIONS.map(({ value, label }) => (
@@ -35,6 +40,6 @@ export const BoardPage = () => {
           />
         ))}
       </div>
-    </div>
+    </PageLayout>
   );
 };

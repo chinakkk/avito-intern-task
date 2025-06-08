@@ -1,7 +1,7 @@
-import { Button, Modal } from 'antd';
 import { FC } from 'react';
 import { useGlobalModal } from 'src/shared/lib/modal/GlobalModalContext';
 import { IssueForm } from 'src/features/issue';
+import { CustomButton } from 'src/shared/ui/compontents/CustomButton/CustomButton';
 
 type CreateIssueButtonProps = {};
 
@@ -11,9 +11,5 @@ export const CreateIssueButton: FC<CreateIssueButtonProps> = () => {
     openModal({ title: 'Создание задачи', content: <IssueForm /> });
   };
 
-  return (
-    <Button type="primary" onClick={handleClick}>
-      Создать задачу
-    </Button>
-  );
+  return <CustomButton onClick={handleClick} label={'Cоздать задачу'} />;
 };

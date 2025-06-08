@@ -3,7 +3,7 @@ import { FC } from 'react';
 
 type Option = { label: string; value: string | number };
 
-type Props = {
+type SelectFieldProps = {
   name: string;
   label: string;
   options: Option[];
@@ -14,7 +14,7 @@ type Props = {
   disabled?: boolean;
 };
 
-export const SelectField: FC<Props> = ({
+export const SelectField: FC<SelectFieldProps> = ({
   name,
   label,
   options,

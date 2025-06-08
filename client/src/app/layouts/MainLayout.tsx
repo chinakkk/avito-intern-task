@@ -6,16 +6,13 @@ import { GlobalModalProvider } from 'src/shared/lib/modal/GlobalModalContext';
 
 export const MainLayout = () => {
   return (
-    <>
-      <GlobalModalProvider>
-        <Header />
-        <main>
-          <Suspense fallback={<Skeleton />}>
-            <Outlet />
-          </Suspense>
-          {/*<IssueModal />*/}
-        </main>
-      </GlobalModalProvider>
-    </>
+    <GlobalModalProvider>
+      <Header />
+      <main>
+        <Suspense fallback={<Skeleton />}>
+          <Outlet />
+        </Suspense>
+      </main>
+    </GlobalModalProvider>
   );
 };

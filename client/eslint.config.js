@@ -15,7 +15,7 @@ export default [
     //   es2021: true,
     // },
     languageOptions: {
-      console: 'readonly',
+      // console: 'readonly',
       parser: tsParser,
       parserOptions: {
         ecmaVersion: 'latest',
@@ -38,6 +38,18 @@ export default [
       'react-hooks': reactHooks,
     },
     rules: {
+      'no-unused-vars': 'off',
+
+      '@typescript-eslint/no-unused-vars': [
+        'warn',
+        {
+          vars: 'all',
+          args: 'after-used',
+          ignoreRestSiblings: true,
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+        },
+      ],
       'unused-imports/no-unused-vars': [
         'warn',
         { vars: 'all', varsIgnorePattern: '^_', args: 'after-used', argsIgnorePattern: '^_' },

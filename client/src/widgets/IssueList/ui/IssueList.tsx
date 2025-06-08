@@ -1,10 +1,11 @@
 import { FC, useEffect, useState } from 'react';
-import { IssueCard } from 'src/entities/issue/ui/IssueCard';
-import { Empty } from 'antd';
+import { Empty, Table } from 'antd';
 import { IssueType } from 'src/entities/issue/model/types/issueTypes';
 import { useInView } from 'react-intersection-observer';
 import { useGlobalModal } from 'src/shared/lib/modal/GlobalModalContext';
 import { IssueForm } from 'src/features/issue';
+
+import { getIssueColumns } from 'src/entities/issue/ui/IssueColumns';
 
 const infinityStep = 10;
 
@@ -32,20 +33,21 @@ export const IssueList: FC<IssueListProps> = ({ issues }) => {
   const visibleTasks = issues.slice(0, visibleCount);
 
   return (
-    <div className="flex flex-col gap-4">
-      {visibleTasks?.map(issue => (
-        <IssueCard
-          onClick={() =>
+    <>
+      <Table
+        className={'w-[100%]'}
+        dataSource={visibleTasks}
+        columns={getIssueColumns({
+          onClick: record =>
             openModal({
               title: 'Просмотр задачи',
-              content: <IssueForm selectedIssue={issue} />,
-            })
-          }
-          key={issue.id}
-          issue={issue}
-        />
-      ))}
+              content: <IssueForm selectedIssue={record} />,
+            }),
+        })}
+        rowKey="id"
+        pagination={false}
+      />
       {visibleCount < issues.length && <div ref={observerRef} className="h-8" />}
-    </div>
+    </>
   );
 };
