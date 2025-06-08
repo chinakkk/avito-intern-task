@@ -12,23 +12,29 @@ import {
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ROUTES } from 'src/shared/config/routes';
 import { useGlobalModal } from 'src/shared/lib/modal/GlobalModalContext';
+import { isIssueFormChanged } from 'src/features/issue/lib/isIssueFormChanged';
+import { SelectField } from 'src/shared/ui/form/SelectField';
+import { useIssueFormSubmit } from 'src/features/issue/lib/useIssueFormSubmit';
 
 const { TextArea } = Input;
 
 type IssueFormProps = {
   selectedIssue?: IssueType;
-  type: 'create' | 'view';
-  onSuccess?: () => void;
 };
 
-export const IssueForm: FC<IssueFormProps> = ({ selectedIssue, type, onSuccess }) => {
-  const [form] = Form.useForm();
+export const IssueForm: FC<IssueFormProps> = ({ selectedIssue }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { closeModal } = useGlobalModal();
+  const isEditMode = !!selectedIssue;
+  const [form] = Form.useForm();
 
-  const { mutate: createIssue, isPending: isCreating } = useCreateIssueMutation();
-  const { mutate: updateIssue, isPending: isUpdating } = useUpdateIssueMutation();
+  const formValues = Form.useWatch([], form);
+
+  const { handleSubmit, isPending } = useIssueFormSubmit({
+    isEditMode,
+    selectedIssue,
+    resetForm: () => form.resetFields(),
+  });
 
   const {
     data: boardsData,
@@ -37,27 +43,6 @@ export const IssueForm: FC<IssueFormProps> = ({ selectedIssue, type, onSuccess }
   } = useBoardsQuery();
   const { data: usersData, isFetching: isUsersLoading, refetch: refetchUsers } = useUsersQuery();
 
-  const onSubmit = (issueValues: CreateIssueType) => {
-    if (type === 'create') {
-      createIssue(issueValues, {
-        onSuccess: () => {
-          form.resetFields();
-          onSuccess?.();
-        },
-      });
-      closeModal();
-    } else if (type === 'view' && selectedIssue?.id) {
-      updateIssue(
-        { ...issueValues, id: selectedIssue.id },
-        {
-          onSuccess: () => {
-            onSuccess?.();
-          },
-        },
-      );
-      closeModal();
-    }
-  };
   useEffect(() => {
     if (selectedIssue) {
       form.setFieldsValue({
@@ -69,34 +54,12 @@ export const IssueForm: FC<IssueFormProps> = ({ selectedIssue, type, onSuccess }
     }
   }, [selectedIssue, form]);
 
-  const formValues = Form.useWatch([], form);
-
-  const shallowEqual = (a: Record<string, any>, b: Record<string, any>) => {
-    const aKeys = Object.keys(a);
-    const bKeys = Object.keys(b);
-    if (aKeys.length !== bKeys.length) return false;
-
-    return aKeys.every(key => a[key] === b[key]);
-  };
-
   const isChanged = useMemo(() => {
-    if (type === 'create') return true;
-    if (!selectedIssue) return false;
-
-    const normalizedSelectedIssue = {
-      boardId: selectedIssue.boardId,
-      title: selectedIssue.title,
-      description: selectedIssue.description,
-      priority: selectedIssue.priority,
-      status: selectedIssue.status,
-      assigneeId: selectedIssue.assignee?.id,
-    };
-
-    return !shallowEqual(formValues ?? {}, normalizedSelectedIssue);
-  }, [formValues, selectedIssue, type]);
+    return isIssueFormChanged(formValues, selectedIssue, isEditMode);
+  }, [formValues, selectedIssue, isEditMode]);
 
   return (
-    <Form form={form} layout="vertical" onFinish={onSubmit}>
+    <Form form={form} layout="vertical" onFinish={handleSubmit}>
       <Form.Item
         name="title"
         label="Название"
@@ -132,25 +95,19 @@ export const IssueForm: FC<IssueFormProps> = ({ selectedIssue, type, onSuccess }
         </Select>
       </Form.Item>
 
-      <Form.Item name="priority" label="Приоритет">
-        <Select placeholder="Выберите приоритет">
-          {PRIORITY_OPTIONS.map(opt => (
-            <Select.Option key={opt.value} value={opt.value}>
-              {opt.label}
-            </Select.Option>
-          ))}
-        </Select>
-      </Form.Item>
+      <SelectField
+        name="priority"
+        label="Приоритет"
+        options={[...PRIORITY_OPTIONS]}
+        placeholder="Выберите приоритет"
+      />
 
-      <Form.Item name="status" label="Статус">
-        <Select placeholder="Выберите статус">
-          {STATUS_OPTIONS.map(opt => (
-            <Select.Option key={opt.value} value={opt.value}>
-              {opt.label}
-            </Select.Option>
-          ))}
-        </Select>
-      </Form.Item>
+      <SelectField
+        name="status"
+        label="Статус"
+        options={[...STATUS_OPTIONS]}
+        placeholder="Выберите статус"
+      />
 
       <Form.Item
         name="assigneeId"
@@ -171,7 +128,7 @@ export const IssueForm: FC<IssueFormProps> = ({ selectedIssue, type, onSuccess }
       </Form.Item>
 
       <div className={`flex justify-between ${location.pathname !== '/issues' && 'justify-end'}`}>
-        {location.pathname === '/issues' && selectedIssue?.boardId && (
+        {location.pathname === ROUTES.ISSUES && selectedIssue?.boardId && (
           <Button
             type="default"
             onClick={() => navigate(`${ROUTES.BOARD}/${selectedIssue?.boardId}`)}
@@ -179,13 +136,8 @@ export const IssueForm: FC<IssueFormProps> = ({ selectedIssue, type, onSuccess }
             Перейти на доску
           </Button>
         )}
-        <Button
-          disabled={!isChanged}
-          type="primary"
-          htmlType="submit"
-          loading={isCreating || isUpdating}
-        >
-          {type === 'create' ? 'Создать' : 'Сохранить'}
+        <Button disabled={!isChanged} type="primary" htmlType="submit" loading={isPending}>
+          {isEditMode ? 'Сохранить' : 'Создать'}
         </Button>
       </div>
     </Form>
