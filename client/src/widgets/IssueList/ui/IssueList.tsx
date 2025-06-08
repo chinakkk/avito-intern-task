@@ -38,7 +38,7 @@ export const IssueList: FC<IssueListProps> = ({ issues }) => {
           onClick={() =>
             openModal({
               title: 'Просмотр задачи',
-              content: <IssueForm type={'view'} selectedIssue={issue} />,
+              content: <IssueForm selectedIssue={issue} />,
             })
           }
           key={issue.id}

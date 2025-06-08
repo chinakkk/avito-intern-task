@@ -20,7 +20,7 @@ export const BoardColumn: FC<BoardColumnProps> = ({ title, issues }) => {
           onClick={() =>
             openModal({
               title: 'Просмотр задачи',
-              content: <IssueForm type={'view'} selectedIssue={issue} />,
+              content: <IssueForm selectedIssue={issue} />,
             })
           }
           key={issue.id}

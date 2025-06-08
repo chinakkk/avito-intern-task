@@ -8,7 +8,7 @@ type CreateIssueButtonProps = {};
 export const CreateIssueButton: FC<CreateIssueButtonProps> = () => {
   const { openModal } = useGlobalModal();
   const handleClick = () => {
-    openModal({ title: 'Создание задачи', content: <IssueForm type={'create'} /> });
+    openModal({ title: 'Создание задачи', content: <IssueForm /> });
   };
 
   return (

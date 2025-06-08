@@ -1,7 +1,6 @@
 import { FC } from 'react';
 import { Card, Tag, Typography } from 'antd';
 import { IssueType } from 'src/entities/issue/model/types/issueTypes';
-import { useModalIssuesActions } from 'src/entities/modal/model/modalIssuesSlice';
 
 interface IssueCardProps {
   issue: IssueType;

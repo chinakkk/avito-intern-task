@@ -29,7 +29,7 @@ export const Header: FC = () => {
           label: <Link to={path}>{label}</Link>,
         }))}
       />
-      <CreateIssueButton type="create" />
+      <CreateIssueButton />
     </AntHeader>
   );
 };
